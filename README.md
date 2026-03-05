@@ -1,10 +1,10 @@
 # Pixel Art Style Post Processing
 
-Pipeline to replicate pixel art style for normal images. 
+Pixelated image abstraction to mimic pixel art style. 
 The process includes three steps-
 - Downsampling
-- Noise addition
-- Color quantization
+- Posterization
+- Dithering
 
 ## Downsampling 
 
@@ -20,4 +20,23 @@ We can instead replace the square with some function of the pixel values in the 
 
 This is similar to pooling in CNN. Pooling can make the effect less sensitive to translation. Mean pooling have the effect of bluring the image, while median pooling denoises the image while preserving the edges and structure of original images. 
 
-![Frame 3](https://github.com/user-attachments/assets/596f53cc-2815-45c3-91b8-cf521560e267)
+![Frame 3](https://github.com/user-attachments/assets/df53019a-6ba3-43fb-84f4-5b8685713111)
+
+## Color quantization
+Posterization is an effect of reducing a continous range to color to a limited range of discrete colors. Three different quantization methods are used:
+- Floor: replicates quantization due to lower bit colors of older hardware
+- Kmeans Clustering
+- Gausian clustering
+- Median Cut
+
+  ![Frame 5](https://github.com/user-attachments/assets/21f085a4-fc54-478c-baf2-3fd31f23edb3)
+
+## Dithering 
+Nosie is added for remove banding and to show gradients. [Read more](https://surma.dev/things/ditherpunk/index.html).
+
+Ordered bayer noise is added to the image in some proportion before color quantization 
+![image 30](https://github.com/user-attachments/assets/2107a686-5733-435d-a63b-ffa1184d8e35)
+
+### Projection based dithering
+Instead of adding the noise, we can generate a scalar value for each color based on its distance from its first nearest color in the palette and next nearest color. We can use this value to dither the image. If the value is smaller than noise value than replace the original pixel with the nearest color otherwise replace it with next nearest color. 
+
